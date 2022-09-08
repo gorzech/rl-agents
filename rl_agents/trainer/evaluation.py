@@ -138,12 +138,12 @@ class Evaluation(object):
             terminal = False
             self.seed(self.episode)
             self.reset()
-            rewards = []
+            self.episode_rewards_ = []
             start_time = time.time()
             while not terminal:
                 # Step until a terminal step is reached
                 reward, terminal = self.step()
-                rewards.append(reward)
+                self.episode_rewards_.append(reward)
 
                 # Catch interruptions
                 try:
@@ -154,8 +154,8 @@ class Evaluation(object):
 
             # End of episode
             duration = time.time() - start_time
-            self.after_all_episodes(self.episode, rewards, duration)
-            self.after_some_episodes(self.episode, rewards)
+            self.after_all_episodes(self.episode, self.episode_rewards_, duration)
+            self.after_some_episodes(self.episode, self.episode_rewards_)
 
     def step(self):
         """
