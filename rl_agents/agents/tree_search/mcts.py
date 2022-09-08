@@ -24,6 +24,7 @@ class MCTSAgent(AbstractTreeSearchAgent):
         config.update({
             "budget": 100,
             "horizon": None,
+            "episodes": None,
             "prior_policy": {"type": "random_available"},
             "rollout_policy": {"type": "random_available"},
             "env_preprocessors": []
@@ -116,6 +117,9 @@ class MCTS(AbstractPlanner):
         if not self.config["horizon"]:
             self.config["episodes"], self.config["horizon"] = \
                 OLOP.allocation(self.config["budget"], self.config["gamma"])
+        elif not self.config["episodes"]:
+            self.config["episodes"] = self.config["budget"] // self.config["horizon"]
+        logger.info(f'Agent config is horizon {self.config["horizon"]}, episodes {self.config["episodes"]}, budget {self.config["budget"]}, gamma {self.config["gamma"]}, temperature {self.config["temperature"]}.' )
 
     @classmethod
     def default_config(cls):
